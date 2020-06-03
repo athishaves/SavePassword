@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content">
+
+    <!-- Parent Floating Widget -->
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/parent_floating_widget"
+        tools:ignore="UselessParent">
+
+        <!-- Collapsed layout -->
+        <RelativeLayout
+            android:id="@+id/collapsed_layout"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:visibility="visible"
+            >
+
+            <ImageView
+                android:id="@+id/collapsed_image"
+                android:layout_width="65dp"
+                android:layout_height="65dp"
+                android:src="@mipmap/ic_launcher"
+                />
+
+            <ImageView
+                android:id="@+id/button_close"
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:layout_alignEnd="@id/collapsed_image"
+                android:src="@drawable/ic_close_black_24dp"
+                />
+        </RelativeLayout>
+
+        <!-- Expanded Layout -->
+        <LinearLayout
+            android:id="@+id/expanded_layout"
+            android:layout_width="wrap_content"
+            android:layout_height="200dp"
+            android:orientation="horizontal"
+            android:background="@drawable/translucent_bg"
+            android:visibility="gone"
+            >
+
+            <ImageView
+                android:id="@+id/button_close_expanded_left"
+                android:layout_width="20dp"
+                android:paddingTop="2dp"
+                android:paddingBottom="2dp"
+                android:rotation="180"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:src="@drawable/ic_arrow_back_black_24dp"
+                />
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/reduced_passwords_list"
+                android:layout_marginStart="2dp"
+                android:layout_marginEnd="2dp"
+                android:layout_width="200dp"
+                android:layout_height="wrap_content"
+                />
+
+            <ImageView
+                android:id="@+id/button_close_expanded_right"
+                android:layout_width="20dp"
+                android:paddingTop="2dp"
+                android:paddingBottom="2dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:src="@drawable/ic_arrow_back_black_24dp"
+                />
+        </LinearLayout>
+
+    </RelativeLayout>
+
+</FrameLayout>

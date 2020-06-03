@@ -1,6 +1,8 @@
 package com.athishWorks.savepasswords.activity;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -11,7 +13,10 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.database.Cursor;
+import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
+import android.provider.Settings;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -26,6 +31,7 @@ import android.widget.Toast;
 import android.widget.ToggleButton;
 
 import com.athishWorks.savepasswords.DatabaseHelper;
+import com.athishWorks.savepasswords.FloatingService;
 import com.athishWorks.savepasswords.PasswordGenerator;
 import com.athishWorks.savepasswords.R;
 import com.athishWorks.savepasswords.adapters.PasswordAdapter;
@@ -40,6 +46,7 @@ import java.util.ArrayList;
 public class MainActivity extends AppCompatActivity {
 
     final static public String SHARED_PREFERENCE = "Data";
+    private static final int SYSTEM_ALERT_WINDOW_PERMISSION = 100;
 
     RecyclerView recyclerView;
 
@@ -72,7 +79,7 @@ public class MainActivity extends AppCompatActivity {
             public void onEditClick(int position) {
                 PasswordsData p = passwordsDataArrayList.get(position);
                 Log.i("Pass", "Tapped Position " + position);
-                addData(p, 0, false, true);
+                addData(p, 1, false, true);
             }
 
             @Override
@@ -264,6 +271,30 @@ public class MainActivity extends AppCompatActivity {
 
     private void callASnackBar(String a) {
         Snackbar.make(findViewById(R.id.main_view), a, Snackbar.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            if (!Settings.canDrawOverlays(this)) {
+                askPermissions();
+            } else {
+                startService(new Intent(MainActivity.this, FloatingService.class));
+            }
+        }
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        stopService(new Intent(MainActivity.this, FloatingService.class));
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.M)
+    private void askPermissions() {
+        Intent intent = new Intent(Settings.ACTION_MANAGE_OVERLAY_PERMISSION, Uri.parse("package:" + getPackageName()));
+        startActivityForResult(intent, SYSTEM_ALERT_WINDOW_PERMISSION);
     }
 
 }
